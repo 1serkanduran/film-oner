@@ -13,7 +13,7 @@ function App() {
           <Route path="/" exact element={<Moods />} />
           <Route path="/movies/:mood" element={<Movies />} />
         </Routes>
-        {/* <Footer /> */} //
+        {/* <Footer /> */} 
       </div>
     </BrowserRouter>
   );
