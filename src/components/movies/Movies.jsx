@@ -22,7 +22,7 @@ const Movies = () => {
   const fetchRecommendedMovies = async () => {
     try {
       const fetchedMovies = await getMoviesByMood(mood, currentPage);
-      console.log("current page", currentPage);
+      // console.log("current page", currentPage);
       const filteredMovies = fetchedMovies.filter(movie => movie.vote_average > 5 && movie.overview);
       if (!filteredMovies.length) {
         console.error('Filtreleme sonucu boş!');
@@ -124,13 +124,13 @@ const Movies = () => {
                       ))}
                     </div>
                     <div className="flex flex-row justify-between mt-4 w-full">
-                      <Button type="primary" danger onClick={handlePreviousMovieClick} icon={<LeftOutlined />}>Geri</Button>
+                      <Button type="primary" danger onClick={handlePreviousMovieClick} icon={<LeftOutlined />}></Button>
                       <div className="flex flex-row">
                         <Button type="primary" danger onClick={handleGoBackButton} icon={<HomeOutlined />}>Modu düzenle</Button>
                         <div style={{ width: '8px' }}></div> 
                         <Button type="primary" danger onClick={handleReloadButtonClick} icon={<ReloadOutlined />}>Modu Yenile</Button>
                       </div>
-                      <Button type="primary" danger onClick={handleNextMovieClick} icon={<RightOutlined />}>İleri</Button>
+                      <Button type="primary" danger onClick={handleNextMovieClick} icon={<RightOutlined />}></Button>
                     </div>
                   </div>
                 </div>

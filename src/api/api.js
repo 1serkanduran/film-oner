@@ -61,11 +61,11 @@ const getMoviesByMood = async (mood, pageCount = 5) => {
       }
     );
     const totalPage = response.data.total_pages % 500;
-    console.log(totalPage);
+    // console.log(totalPage);
     var firstNumber = Math.floor(Math.random() * (totalPage - 5));
     var secondNumber = firstNumber + 5;
-    console.log(firstNumber);
-    console.log(secondNumber);
+    // console.log(firstNumber);
+    // console.log(secondNumber);
     for (let page = firstNumber; page <= secondNumber; page++) {
       const response = await axios.get(
         `https://api.themoviedb.org/3/discover/movie`,
