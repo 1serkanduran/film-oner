@@ -126,7 +126,7 @@ const Movies = () => {
                     <div className="flex flex-row justify-between mt-4 w-full">
                       <Button type="primary" danger onClick={handlePreviousMovieClick} icon={<LeftOutlined />}></Button>
                       <div className="flex flex-row">
-                        <Button type="primary" danger onClick={handleGoBackButton} icon={<HomeOutlined />}>Modu düzenle</Button>
+                        <Button type="primary" danger onClick={handleGoBackButton} icon={<HomeOutlined />}>Modu Düzenle</Button>
                         <div style={{ width: '8px' }}></div> 
                         <Button type="primary" danger onClick={handleReloadButtonClick} icon={<ReloadOutlined />}>Modu Yenile</Button>
                       </div>
@@ -138,7 +138,7 @@ const Movies = () => {
             ) : (
               <div className="flex flex-col items-center mt-4">
                 <p className="text-white mb-4">Öneri filmi bulunamadı.</p>
-                <Button type="primary" danger onClick={handleReloadButtonClick}  icon={<ReloadOutlined />}>Sana daha çok film önerebilmemiz için lütfen yenile!</Button>
+                <Button type="primary" danger onClick={handleReloadButtonClick}  icon={<ReloadOutlined />}>Sana daha çok film önerebilmemiz için lütfen YENİLE!</Button>
               </div>
 
             )}
