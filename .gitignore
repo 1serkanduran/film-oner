@@ -8,6 +8,9 @@ pnpm-debug.log*
 lerna-debug.log*
 .env
 
+public/google_verification.html
+
+
 
 node_modules
 dist
