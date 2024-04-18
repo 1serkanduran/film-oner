@@ -128,7 +128,7 @@ const Movies = () => {
                       <div className="flex flex-row">
                         <Button type="primary" danger onClick={handleGoBackButton} icon={<HomeOutlined />}>Modu Düzenle</Button>
                         <div style={{ width: '8px' }}></div> 
-                        <Tooltip title="Bu moda ugun film bulamadın mı? Modu yenilediğinde sana yeni önerilen filmler gelecek.">
+                        <Tooltip title="Bu moda ugun film bulamadın mı? Yenilediğinde sana yeni önerilen filmler gelecek.">
                         <Button type="primary" danger onClick={handleReloadButtonClick} icon={<ReloadOutlined />}>Modu Yenile</Button>
                         </Tooltip>
                       </div>
