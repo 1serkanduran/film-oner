@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/header/Header';
 import Moods from './components/moods/Moods';
 import Movies from './components/movies/Movies';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/movies/:mood" element={<Movies />} />
         </Routes>
         {/* <Footer /> */} 
+        <Analytics />
       </div>
     </BrowserRouter>
   );
