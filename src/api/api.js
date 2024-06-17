@@ -105,4 +105,23 @@ const getMovieVideos = async (movieId) => {
   }
 };
 
-export { getMoviesByMood, getMovieVideos };
+
+const getMovieReviews = async (movieId) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${movieId}/reviews`,
+      {
+        params: {
+          api_key: API_KEY,
+        },
+      }
+    );
+    return response.data.results;
+  } catch (error) {
+    console.error("Error fetching movie reviews:", error);
+    return [];
+  }
+};
+
+
+export { getMoviesByMood, getMovieVideos, getMovieReviews };
