@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Tag, Skeleton, Tooltip } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
-import { HomeOutlined, LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined, HomeOutlined, LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
 import { getMoviesByMood, getMovieVideos } from '../../api/api';
 import { ToastContainer, toast } from 'react-toastify';
-import { useSwipeable } from 'react-swipeable';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Movies = () => {
@@ -14,7 +13,7 @@ const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(5); // pageCount burada azaltıldı
 
   useEffect(() => {
     fetchRecommendedMovies();
@@ -22,7 +21,7 @@ const Movies = () => {
 
   const fetchRecommendedMovies = async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(true); // Yükleme durumunu başlat
       const fetchedMovies = await getMoviesByMood(mood, currentPage);
       const filteredMovies = fetchedMovies.filter(movie => movie.vote_average > 5 && movie.overview);
       if (!filteredMovies.length) {
@@ -37,21 +36,14 @@ const Movies = () => {
           return { ...movie, videoKey };
         }));
         setMovies(moviesWithVideos);
-        setCurrentMovieIndex(0); // İlk filmi göster
+        setCurrentMovieIndex(Math.floor(Math.random() * moviesWithVideos.length));
       }
     } catch (error) {
       console.error('Error fetching recommended movies:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Yükleme durumunu sonlandır
     }
   };
-
-  const handlers = useSwipeable({
-    onSwipedUp: () => handleNextMovieClick(),
-    onSwipedDown: () => handlePreviousMovieClick(),
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true
-  });
 
   const handlePreviousMovieClick = () => {
     setCurrentMovieIndex(prevIndex => (prevIndex - 1 + movies.length) % movies.length);
@@ -76,7 +68,7 @@ const Movies = () => {
   };
 
   return (
-    <div {...handlers} className="min-h-screen flex flex-col items-center justify-center bg-gray-800">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-800">
       <h3 className="text-white mt-1" style={{ textDecoration: 'underline' }}>"İşte senin için önerilen muhteşem filmler..."</h3>
       <div className="container mx-auto text-center flex-grow max-w-screen-lg">
         {isLoading ? (
@@ -89,7 +81,7 @@ const Movies = () => {
           <>
             {movies.length > 0 ? (
               <div className="flex flex-col mt- items-center">
-                <div className="rounded-lg shadow-xl p-4 mt-4 w-full max-w-screen-sm bg-gray-950">
+                <div className="rounded-lg shadow-xl p-4 mt-4 w-full max-w-screen-sm bg-gray-950" >
                   <div className="flex flex-col items-start text-white">
                     <div className="w-full">
                       {(movies[currentMovieIndex].videoKey && movies[currentMovieIndex].videoKey !== null) ? (
@@ -104,7 +96,7 @@ const Movies = () => {
                         <img
                           src={`https://image.tmdb.org/t/p/w500/${movies[currentMovieIndex].poster_path}`}
                           alt="Movie Poster"
-                          className="mx-auto"
+                          className="mx-auto" 
                           style={{ maxWidth: '100%', height: 'auto', maxHeight: '400px' }}
                         />
                       )}
@@ -131,15 +123,15 @@ const Movies = () => {
                       ))}
                     </div>
                     <div className="flex flex-row justify-between mt-4 w-full">
-                      <Button type="primary" danger onClick={handlePreviousMovieClick}>Önceki</Button>
+                      <Button type="primary" danger onClick={handlePreviousMovieClick} icon={<LeftOutlined />}></Button>
                       <div className="flex flex-row">
-                        <Button type="primary" danger onClick={handleGoBackButton} icon={<HomeOutlined />}>Modlara geri dön</Button>
-                        <div style={{ width: '8px' }}></div>
+                        <Button type="primary" danger onClick={handleGoBackButton} icon={<HomeOutlined />}>Modu Düzenle</Button>
+                        <div style={{ width: '8px' }}></div> 
                         <Tooltip title="Bu moda uygun film bulamadın mı? Yenilediğinde sana yeni önerilen filmler gelecek.">
                           <Button type="primary" danger onClick={handleReloadButtonClick} icon={<ReloadOutlined />}>Karıştır</Button>
                         </Tooltip>
                       </div>
-                      <Button type="primary" danger onClick={handleNextMovieClick}>Sonraki</Button>
+                      <Button type="primary" danger onClick={handleNextMovieClick} icon={<RightOutlined />}></Button>
                     </div>
                   </div>
                 </div>
