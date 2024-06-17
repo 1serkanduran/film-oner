@@ -4,6 +4,7 @@ const API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
 
 const getGenreByMood = (mood) => {
   switch (mood) {
+    // Mood'a göre genre id'lerini döndüren mevcut switch-case yapısı
     case "Mutlu":
       return "35";
     case "Heyecanlı":
@@ -47,7 +48,6 @@ const getGenreByMood = (mood) => {
 
 const getMoviesByMood = async (mood, pageCount = 5) => {
   try {
-    let allResults = [];
     const response = await axios.get(
       `https://api.themoviedb.org/3/discover/movie`,
       {
@@ -56,20 +56,17 @@ const getMoviesByMood = async (mood, pageCount = 5) => {
           with_genres: getGenreByMood(mood),
           sort_by: "popularity.desc",
           language: "tr-TR",
-          //page: page,
+          page: 1
         },
       }
     );
-    const totalPage = response.data.total_pages % 500;
-    // console.log(totalPage);
-    var firstNumber = Math.floor(Math.random() * (totalPage - 5));
-    var secondNumber = firstNumber + 5;
-    // console.log(firstNumber);
-    // console.log(secondNumber);
-    for (let page = firstNumber; page <= secondNumber; page++) {
-      const response = await axios.get(
-        `https://api.themoviedb.org/3/discover/movie`,
-        {
+    const totalPages = response.data.total_pages % 500;
+    const startPage = Math.floor(Math.random() * (totalPages - pageCount)) + 1;
+
+    const requests = [];
+    for (let page = startPage; page < startPage + pageCount; page++) {
+      requests.push(
+        axios.get(`https://api.themoviedb.org/3/discover/movie`, {
           params: {
             api_key: API_KEY,
             with_genres: getGenreByMood(mood),
@@ -77,23 +74,13 @@ const getMoviesByMood = async (mood, pageCount = 5) => {
             language: "tr-TR",
             page: page,
           },
-        }
+        })
       );
-      allResults = [...allResults, ...response.data.results];
     }
-    //allResults = [...allResults, ...response.data.results];
-    // for (let page = 1; page <= pageCount; page++) {
-    //   const response = await axios.get(`https://api.themoviedb.org/3/discover/movie`, {
-    //     params: {
-    //       api_key: API_KEY,
-    //       with_genres: getGenreByMood(mood),
-    //       sort_by: 'popularity.desc',
-    //       language: 'tr-TR',
-    //       //page: page,
-    //     },
-    //   });
-    //   allResults = [...allResults, ...response.data.results];
-    // }
+
+    const responses = await Promise.all(requests);
+    const allResults = responses.flatMap(response => response.data.results);
+
     return allResults;
   } catch (error) {
     console.error("Error fetching movies:", error);
@@ -104,14 +91,14 @@ const getMoviesByMood = async (mood, pageCount = 5) => {
 const getMovieVideos = async (movieId) => {
   try {
     const response = await axios.get(
-      `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}` //&language=tr
+      `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}`
     );
-    const data = await response.data; // response.json() yerine response.data kullan
+    const data = await response.data;
     if (!data.results.length) {
       console.error("Filmin videosu bulunamadı!");
       return null;
     }
-    return data.results[0].key; // En yüksek kaliteli videonun key'i
+    return data.results[0].key;
   } catch (error) {
     console.error("Error fetching movie videos:", error);
     return null;
