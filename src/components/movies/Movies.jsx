@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, Tag, Skeleton, Tooltip, Avatar } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
 import { HomeOutlined, LoadingOutlined, ReloadOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { getMoviesByMood, getMovieVideos, getMovieReviews } from '../../api/api';
+import { getMoviesByMood, getMovieVideos, getMovieReviews, translateText } from '../../api/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -31,7 +31,7 @@ const Movies = () => {
         console.error('Filtreleme sonucu boş!');
         setMovies([]);
       } else {
-        const moviesWithVideos = await Promise.all(filteredMovies.map(async movie => {
+        const moviesWithVideosAndReviews = await Promise.all(filteredMovies.map(async movie => {
           const videoKey = await getMovieVideos(movie.id).catch(error => {
             console.error('Film videoları alınırken hata oluştu:', error);
             return null;
@@ -40,9 +40,14 @@ const Movies = () => {
             console.error('Film yorumları alınırken hata oluştu:', error);
             return [];
           });
-          return { ...movie, videoKey, reviews: movieReviews };
+          // Yorumları Türkçeye çevirme
+          const translatedReviews = await Promise.all(movieReviews.map(async review => {
+            const translatedContent = await translateText(review.content);
+            return { ...review, content: translatedContent };
+          }));
+          return { ...movie, videoKey, reviews: translatedReviews };
         }));
-        setMovies(moviesWithVideos);
+        setMovies(moviesWithVideosAndReviews);
         setCurrentMovieIndex(0);
       }
     } catch (error) {
@@ -159,7 +164,7 @@ const Movies = () => {
                   <div className="flex flex-row justify-between mt-4 w-full">
                     <Button type="primary" danger onClick={handlePreviousMovieClick} icon={<LeftOutlined />}></Button>
                     <div className="flex flex-row">
-                      <Button type="primary" danger onClick={handleGoBackButton} icon={<HomeOutlined />}>Moda Geri Dön</Button>
+                      <Button type="primary" danger onClick={handleGoBackButton} icon={<HomeOutlined />}>Modlara Geri Dön</Button>
                       <div style={{ width: '8px' }}></div>
                       <Tooltip title="Bu moda uygun film bulamadın mı? Yeniden yüklendiğinde sana yeni önerilen filmler gelecek.">
                         <Button type="primary" danger onClick={handleReloadButtonClick} icon={<ReloadOutlined />}>Karıştır</Button>

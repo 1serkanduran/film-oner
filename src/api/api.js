@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
+const GOOGLE_CLOUD_API_KEY = import.meta.env.VITE_REACT_APP_GOOGLE_CLOUD_API_KEY
 
 const getGenreByMood = (mood) => {
   switch (mood) {
@@ -123,5 +124,24 @@ const getMovieReviews = async (movieId) => {
   }
 };
 
+const translateText = async (text) => {
+  try {
+    const response = await axios.post(
+      `https://translation.googleapis.com/language/translate/v2`,
+      {},
+      {
+        params: {
+          q: text,
+          target: 'tr',
+          key: GOOGLE_CLOUD_API_KEY,
+        },
+      }
+    );
+    return response.data.data.translations[0].translatedText;
+  } catch (error) {
+    console.error('Çeviri yapılırken hata oluştu:', error);
+    throw error;
+  }
+};
 
-export { getMoviesByMood, getMovieVideos, getMovieReviews };
+export { getMoviesByMood, getMovieVideos, getMovieReviews, translateText };
