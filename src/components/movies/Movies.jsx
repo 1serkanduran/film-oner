@@ -6,6 +6,12 @@ import { getMoviesByMood, getMovieVideos, getMovieReviews, translateText } from 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// HTML karakterlerini decode eden fonksiyon
+const decodeHtmlEntities = (text) => {
+  const doc = new DOMParser().parseFromString(text, "text/html");
+  return doc.documentElement.textContent;
+};
+
 const Movies = () => {
   const { mood } = useParams();
   const navigate = useNavigate();
@@ -40,10 +46,11 @@ const Movies = () => {
             console.error('Film yorumları alınırken hata oluştu:', error);
             return [];
           });
-          // Yorumları Türkçeye çevirme
+          // Yorumları Türkçeye çevirme ve HTML karakterlerini decode etme
           const translatedReviews = await Promise.all(movieReviews.map(async review => {
             const translatedContent = await translateText(review.content);
-            return { ...review, content: translatedContent };
+            const decodedContent = decodeHtmlEntities(translatedContent);
+            return { ...review, content: decodedContent };
           }));
           return { ...movie, videoKey, reviews: translatedReviews };
         }));
