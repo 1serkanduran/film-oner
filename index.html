@@ -19,8 +19,23 @@
     <meta name="google-site-verification" content="fR_uqcvBlGCJ7OU5IjdkW_5IO6gHSrNIH9ZcvymNdgY" />
     <title>Moduna Göre Film Seç!</title>
     <script src="https://cdn.jsdelivr.net/npm/@vercel/analytics@1/dist/client.js" defer></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Moduna Göre Film",
+        "url": "https://www.modunagorefilm.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.modunagorefilm.com/ara?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+      </script>
   </head>
   <body>
+    <noscript>Bu siteyi kullanabilmek için JavaScript'i etkinleştirmeniz gerekmektedir.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
